@@ -1,0 +1,1 @@
+CREATE USER odoo WITH PASSWORD 'odoo';

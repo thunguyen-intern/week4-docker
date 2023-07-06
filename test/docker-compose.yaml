@@ -1,0 +1,11 @@
+version: "3"
+services:
+  db:
+    image: postgres:13
+    ports:
+      - '5555:5432'
+    volumes:
+      - ./data/:/docker-entrypoint-initdb.d/
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_HOST_AUTH_METHOD=trust

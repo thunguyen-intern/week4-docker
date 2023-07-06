@@ -40,7 +40,7 @@ RUN chmod -R 775 /opt/odoo && chown -R odoo:odoo /opt/odoo
 ADD config/odoo.conf /opt/odoo/
 
 # Expose Odoo ports
-EXPOSE 8069 8071
+EXPOSE 8069 8071 8072
 
 # USER root
 # RUN apt-get update && \
@@ -48,6 +48,8 @@ EXPOSE 8069 8071
 #     apt-get install -y --no-install-recommends iptables && \
 #     sudo iptables -F && \
 #     apt-get clean    
+
+ADD wait-for-psql.py /usr/local/bin/
 
 # Start Odoo
 USER ${ODOO_USER}

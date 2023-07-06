@@ -1,19 +1,62 @@
-version: "3.8"
+version: '3'
 services:
-  web:
-    image: odoo15
-    depends_on:
-      - db
-    ports:
-      - "8069:8069"
-    environment:
-      - HOST=localhost
-      - USER=odoo
-      - PASSWORD=odoo
+    # Odoo
+    odoo:
+        build: .
+        container_name: odoo
+        image: odoo
+        restart: always
+        networks:
+            - odoo-default
+        volumes:
+            - ./addons:/mnt/extra-addons
+            - ./config/odoo:/etc/odoo
+            - odoo-web-data:/var/lib/odoo
+        links:
+            - db:db
+        ports:
+            - 8069:8069
+        depends_on:
+            - db
+    
+    # # NGINX
+    nginx:
+        build: .
+        container_name: nginx
+        image: nginx
+        restart: always
+        networks:
+            - odoo-default
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ./config/nginx:/etc/nginx/conf.d
+        links:
+            - odoo:odoo
+        depends_on:
+            - odoo
 
-  db:
-    image: odoo15
-    environment:
-      - POSTGRES_DB=db
-      - POSTGRES_USER=odoo
-      - POSTGRES_PASSWORD=odoo
+    # Postgres
+    db:
+        container_name: db
+        image: postgres:13
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: odoo
+            POSTGRES_HOST_AUTH_METHOD: trust
+
+        networks:
+            - odoo-default
+        volumes:
+            - ./postgresql:/docker-entrypoint-initdb.d/
+            # - ./pg-data:/var/lib/postgresql/data
+        # command: createuser -s odoo
+      
+volumes:
+    odoo-web-data:
+    postgresql:
+
+networks:
+    odoo-default:
+        external: true
