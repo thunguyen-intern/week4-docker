@@ -1,21 +1,39 @@
 version: '3'
 services:
     # Odoo
-    odoo:
+    odoo1:
         build: .
-        container_name: odoo
+        container_name: odoo1
         image: odoo
         restart: always
         networks:
             - odoo-default
         volumes:
             - ./addons:/mnt/extra-addons
-            - ./config/odoo:/etc/odoo
-            - odoo-web-data:/var/lib/odoo
+            - ./config/odoo1:/etc/odoo
+            - odoo1-web-data:/var/lib/odoo
         links:
             - db:db
         ports:
-            - 8069:8069
+            - 8070:8069
+        depends_on:
+            - db
+
+    odoo2:
+        build: .
+        container_name: odoo2
+        image: odoo
+        restart: always
+        networks:
+            - odoo-default
+        volumes:
+            - ./addons:/mnt/extra-addons
+            - ./config/odoo2:/etc/odoo
+            - odoo2-web-data:/var/lib/odoo
+        links:
+            - db:db
+        ports:
+            - 8071:8069
         depends_on:
             - db
     
@@ -33,9 +51,11 @@ services:
         volumes:
             - ./config/nginx:/etc/nginx/conf.d
         links:
-            - odoo:odoo
+            - odoo1:odoo1
+            - odoo2:odoo2
         depends_on:
-            - odoo
+            - odoo1
+            - odoo2
 
     # Postgres
     db:
@@ -52,9 +72,10 @@ services:
             - ./postgresql:/docker-entrypoint-initdb.d/
             # - ./pg-data:/var/lib/postgresql/data
         # command: createuser -s odoo
-      
+    
 volumes:
-    odoo-web-data:
+    odoo1-web-data:
+    odoo2-web-data:
     postgresql:
 
 networks:
