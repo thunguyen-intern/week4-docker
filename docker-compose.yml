@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  web:
+    image: odoo15
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    environment:
+      - HOST=localhost
+      - USER=odoo
+      - PASSWORD=odoo
+
+  db:
+    image: odoo15
+    environment:
+      - POSTGRES_DB=db
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
