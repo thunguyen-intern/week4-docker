@@ -20,24 +20,6 @@ services:
             - db
         deploy:
             replicas: 3
-
-    # odoo2:
-    #     build: .
-    #     container_name: odoo2
-    #     image: odoo
-    #     restart: always
-    #     networks:
-    #         - odoo-default
-    #     volumes:
-    #         - ./addons:/mnt/extra-addons
-    #         - ./config/odoo2:/etc/odoo
-    #         - odoo2-web-data:/var/lib/odoo
-    #     links:
-    #         - db:db
-    #     ports:
-    #         - 8071:8069
-    #     depends_on:
-    #         - db
     
     # # NGINX
     nginx:
@@ -52,12 +34,8 @@ services:
             - 443:443
         volumes:
             - ./config/nginx:/etc/nginx/conf.d
-        # links:
-        #     - odoo:odoo
-            # - odoo2:odoo2
         depends_on:
             - odoo
-            # - odoo2
         expose:
             - 80
 
@@ -74,12 +52,9 @@ services:
             - odoo-default
         volumes:
             - ./postgresql:/docker-entrypoint-initdb.d/
-            # - ./pg-data:/var/lib/postgresql/data
-        # command: createuser -s odoo
     
 volumes:
     odoo-web-data:
-    # odoo2-web-data:
     postgresql:
 
 networks:
