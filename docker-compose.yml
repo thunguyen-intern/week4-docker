@@ -1,41 +1,43 @@
 version: '3'
 services:
     # Odoo
-    odoo1:
+    odoo:
         build: .
-        container_name: odoo1
+        # container_name: odoo
         image: odoo
         restart: always
         networks:
             - odoo-default
         volumes:
             - ./addons:/mnt/extra-addons
-            - ./config/odoo1:/etc/odoo
-            - odoo1-web-data:/var/lib/odoo
+            - ./config/odoo:/etc/odoo
+            - odoo-web-data:/var/lib/odoo
         links:
             - db:db
         ports:
-            - 8070:8069
+            - "8070-8072:8069"
         depends_on:
             - db
+        deploy:
+            replicas: 3
 
-    odoo2:
-        build: .
-        container_name: odoo2
-        image: odoo
-        restart: always
-        networks:
-            - odoo-default
-        volumes:
-            - ./addons:/mnt/extra-addons
-            - ./config/odoo2:/etc/odoo
-            - odoo2-web-data:/var/lib/odoo
-        links:
-            - db:db
-        ports:
-            - 8071:8069
-        depends_on:
-            - db
+    # odoo2:
+    #     build: .
+    #     container_name: odoo2
+    #     image: odoo
+    #     restart: always
+    #     networks:
+    #         - odoo-default
+    #     volumes:
+    #         - ./addons:/mnt/extra-addons
+    #         - ./config/odoo2:/etc/odoo
+    #         - odoo2-web-data:/var/lib/odoo
+    #     links:
+    #         - db:db
+    #     ports:
+    #         - 8071:8069
+    #     depends_on:
+    #         - db
     
     # # NGINX
     nginx:
@@ -50,12 +52,14 @@ services:
             - 443:443
         volumes:
             - ./config/nginx:/etc/nginx/conf.d
-        links:
-            - odoo1:odoo1
-            - odoo2:odoo2
+        # links:
+        #     - odoo:odoo
+            # - odoo2:odoo2
         depends_on:
-            - odoo1
-            - odoo2
+            - odoo
+            # - odoo2
+        expose:
+            - 80
 
     # Postgres
     db:
@@ -74,8 +78,8 @@ services:
         # command: createuser -s odoo
     
 volumes:
-    odoo1-web-data:
-    odoo2-web-data:
+    odoo-web-data:
+    # odoo2-web-data:
     postgresql:
 
 networks:
