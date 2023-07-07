@@ -4,7 +4,7 @@ services:
     odoo:
         build: .
         # container_name: odoo
-        image: odoo
+        image: hikari141/intern-odoo15
         restart: always
         networks:
             - odoo-default
