@@ -37,7 +37,7 @@ RUN dpkg -i dumb-init_*.deb
 
 RUN chmod -R 775 /opt/odoo && chown -R odoo:odoo /opt/odoo
 
-ADD config/odoo.conf /opt/odoo/
+ADD config/odoo/odoo.conf /opt/odoo/
 
 # Expose Odoo ports
 EXPOSE 8069 8071 8072

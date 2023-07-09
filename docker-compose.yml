@@ -11,7 +11,9 @@ services:
         volumes:
             - ./addons:/mnt/extra-addons
             - ./config/odoo:/etc/odoo
-            - odoo-web-data:/var/lib/odoo
+            - ./odoo-web-data:/var/lib/odoo
+            ## for HA ##
+            - ./odoo-mount-data:/opt/odoo/.local/share/Odoo
         links:
             - db:db
         ports:
