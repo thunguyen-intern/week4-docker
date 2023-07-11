@@ -13,7 +13,7 @@ RUN apt-get update && \
 RUN apt-get update && apt-get install -yq lsb-release \
     && strace wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list' \
-    && apt-get install -yq postgresql-12 postgresql-client-12
+    && apt-get install -yq postgresql postgresql-client
 
 # Install Node.js dependencies
 RUN apt-get install -y npm \
